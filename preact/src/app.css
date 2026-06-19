@@ -1,0 +1,201 @@
+html,
+body {
+  overflow: hidden;
+}
+
+body {
+  width: 1024px;
+  height: 600px;
+  font-family: "Roboto", "sans-serif";
+  /*border: 1px solid blue;*/
+}
+
+body,
+div div {
+  /*border: 1px solid blue;*/
+}
+
+#info-panel-1 {
+  tr td {
+    padding: 3px;
+  }
+}
+
+#info-panel-2 {
+  tr td {
+    padding: 5px;
+  }
+}
+
+.number-arrow-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* The outer container managing spacing */
+.progress-container {
+  margin: 5px 10px 0 10px; /* 10px margin on left and right sides */
+  padding-bottom: 5px; /* 5px padding on the bottom */
+}
+
+/* The actual background track */
+.progress-track {
+  position: relative; /* Context for centering the text */
+  height: 20px;
+  background-color: #e0e0e0; /* Gray background track */
+  border-radius: 9999px; /* Fully rounds the left and right corners */
+  overflow: hidden; /* Clips the filling bar to the rounded corners */
+}
+
+/* The actual filling bar */
+.progress-bar {
+  height: 100%;
+  background-color: rgb(239, 174, 66); /* Progress bar color (e.g., Blue) */
+  border-radius: 9999px; /* Keeps the filling bar rounded as it moves */
+  transition: width 0.3s ease; /* Smooth animation when width changes */
+}
+
+/* Centered text label */
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(
+          -50%,
+          -50%
+  ); /* Perfectly centers the text over the track */
+  font-family: sans-serif;
+  font-size: 14px; /* Smaller font to fit comfortably inside a 15px high bar */
+  font-weight: bold;
+  color: #333333; /* Dark gray text */
+  pointer-events: none; /* Prevents text from interfering with any clicks */
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+#reg-flag {
+  display: inline-block;
+  margin-right: 5px;
+  padding-bottom: 3px;
+}
+
+#flight-list-container {
+  max-height: 412px;
+}
+
+#map-container {
+  height: 412px;
+  width: 100%;
+}
+
+#flight-list {
+  tr td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+
+  tr td:nth-child(4) {
+    border-right: 2px solid black;
+  }
+
+  tr th:nth-child(4) {
+    border-right: 2px solid black;
+  }
+
+  tr:last-child {
+    border-bottom: 1px solid black;
+  }
+}
+
+.rotating-content-container {
+  height: 412px;
+  width: 100%;
+}
+
+.early,
+.up {
+  color: green;
+}
+
+.late,
+.down {
+  color: red;
+}
+
+.arrow-font {
+  width: 15px;
+  text-align: center;
+}
+
+.ud-arrow {
+  font-size: 0.8rem;
+}
+
+.lr-arrow {
+  font-size: 0.7rem;
+}
+
+#airline-list,
+#flight-list {
+  th td:first-child,
+  th td:nth-child(4) {
+    width: 10%;
+  }
+
+  th td:nth-child(2),
+  th td:nth-child(5) {
+    width: 30%;
+  }
+
+  th td:nth-child(3),
+  th td:nth-child(6) {
+    width: 10%;
+  }
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.map {
+  height: 412px;
+}
+
+/* Container background matching the dark theme */
+@media (prefers-color-scheme: dark) {
+  .leaflet-container {
+    background: #242424 !important;
+  }
+
+  /* Invert and shift colors of the map tiles */
+  .leaflet-layer,
+  .leaflet-tile {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+  }
+
+  /* Optional: Keep standard markers and image popups from inverting */
+  .leaflet-marker-icon,
+  .leaflet-popup-content-wrapper img {
+    filter: invert(100%) hue-rotate(-180deg);
+  }
+}
+
+hr {
+  border: 1px solid black;
+  width: 10px;
+  margin-left: 3px;
+}
+
+#distance-list {
+  thead tr th:nth-child(5) {
+    border-right: 2px solid black;
+  }
+
+  tbody tr td:nth-child(5) {
+    border-right: 2px solid black;
+  }
+
+  tbody tr td {
+    border-bottom: 1px solid black;
+  }
+}

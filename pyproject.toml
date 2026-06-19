@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flight-tracker-py-web"
+version = "0.1.0"
+dependencies = []
+
+[tool.setuptools]
+# Explicitly lists your application directories so setuptools can bundle them
+packages = ["app", "models", "preact", "classes", "services", "utilities"]

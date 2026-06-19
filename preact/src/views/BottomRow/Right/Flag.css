@@ -1,0 +1,9 @@
+.flag {
+  display: inline-block;
+  width: 25px;
+  margin-bottom: 3px;
+}
+
+.registration {
+  display: inline-block;
+}
