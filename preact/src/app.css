@@ -187,6 +187,11 @@ hr {
 }
 
 #distance-list {
+  thead tr th, tbody tr td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+
   thead tr th:nth-child(5) {
     border-right: 2px solid black;
   }

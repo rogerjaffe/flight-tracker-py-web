@@ -40,7 +40,7 @@ const Distance = () => {
     return (
       <table
         id="distance-list"
-        class="table-auto border-collapse w-full text-left text-xs min-w-full"
+        class="table-auto border-collapse w-full text-left text-sm min-w-full"
       >
         <thead class="sticky top-0 bg-gray-50 shadow-sm  [&_th]:pl-2 [&_th]:pr-2">
         <tr class="border-black border-b-2">
