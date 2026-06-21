@@ -1,8 +1,16 @@
+import {type TargetedMouseEvent} from "preact";
 import NumberWithArrow from "../../utilities/NumberWithArrow.tsx";
 import useFlightData from "../../../hooks/useFlightData.ts";
+import {setFlight} from "../../../bridge/pythonBridge";
 
 const FlightList = () => {
   const {flightList, detail} = useFlightData();
+
+  const gotoHex = (e: TargetedMouseEvent<HTMLTableCellElement>) => {
+    const hexCode = e.currentTarget.getAttribute('data-hex');
+    if (!hexCode) return;
+    setFlight(hexCode);
+  }
 
   if (!flightList) return null;
   const flightObjs = Object.values(flightList);
@@ -86,29 +94,30 @@ const FlightList = () => {
             : "";
 
           return (
-            <tr key={leftItem.flight.hex}>
-              <td className={leftClass}>{leftItem.flight.callsign}</td>
-              <td className={leftClass}>
+            <tr key={leftItem.flight.hex} className="cursor-pointer">
+              <td className={leftClass} data-hex={leftItem.hex} onClick={gotoHex}>{leftItem.flight.callsign}</td>
+              <td className={leftClass} data-hex={leftItem.hex} onClick={gotoHex}>
                 {leftItem.flight.origin_airport_iata}
                 {" - "}
                 {leftItem.flight.destination_airport_iata}
               </td>
-              <td className={`text-right ${leftClass}`}>
+              <td className={`text-right ${leftClass}`} data-hex={leftItem.hex} onClick={gotoHex}>
                 {col1AltitudeText}
               </td>
-              <td className={`text-right ${leftClass}`}>{col1SpeedText}</td>
-              <td className={rightClass}>
+              <td className={`text-right ${leftClass}`} data-hex={leftItem.hex} onClick={gotoHex}>{col1SpeedText}</td>
+              <td className={rightClass} data-hex={rightItem?.hex ?? ''} onClick={gotoHex}>
                 {rightItem?.flight.callsign || ""}
               </td>
-              <td className={rightClass}>
+              <td className={rightClass} data-hex={rightItem?.hex ?? ''} onClick={gotoHex}>
                 {rightItem?.flight.origin_airport_iata || ""}
                 {rightItem ? " - " : ""}
                 {rightItem?.flight.destination_airport_iata || ""}
               </td>
-              <td className={`text-right ${rightClass}`}>
+              <td className={`text-right ${rightClass}`} data-hex={rightItem?.hex ?? ''} onClick={gotoHex}>
                 {rightItem ? col2AltitudeText : ""}
               </td>
-              <td className={`text-right ${rightClass}`}>{col2SpeedText}</td>
+              <td className={`text-right ${rightClass}`} data-hex={rightItem?.hex ?? ''}
+                  onClick={gotoHex}>{col2SpeedText}</td>
             </tr>
           );
         })}

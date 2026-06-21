@@ -1,41 +1,37 @@
 import configparser
 import datetime
-import os
-
 from PySide6.QtCore import QTimer
 from PySide6.QtWebEngineCore import QWebEngineSettings
 from suntime import Sun
 
-from classes import BooleanConfigParser
-
 
 class AppManager:
-  def __init__(self, logger, base_path):
+  def __init__(self, logger, base_path, config_manager):
     self.logger = logger
     self.base_path = base_path
     self.browser = None
+    self.config_manager = config_manager
 
-    # Read config.ini information
-    config_path = os.path.join(base_path, 'config.ini')
-    self.config = BooleanConfigParser(interpolation=configparser.ExtendedInterpolation())
-    self.config.read(config_path)
-
-  def get_config(self):
-    return self.config
-
-  def get_config_group(self, group_name: str):
-    return dict(self.config[group_name])
-
-  def get_config_value(self, group_name: str, key: str):
-    return self.config[group_name][key]
-
+  # def get_config(self):
+  #   return self.config
+  #
+  # def get_config_group(self, group_name: str):
+  #   return dict(self.config[group_name])
+  #
+  # def get_config_value(self, group_name: str, key: str):
+  #   return self.config[group_name][key]
+  #
   def set_browser(self, browser):
     self.browser = browser
-    QTimer.singleShot(int(self.config['get_dark_mode']['delay']) * 1000, self.check_dark_mode)
+    QTimer.singleShot(int(self.config_manager.get_config_value('get_dark_mode', 'delay')) * 1000, self.check_dark_mode)
+
+  def set_preact_bridge(self, preact_bridge):
+    self.preact_bridge = preact_bridge
+    QTimer.singleShot(int(self.config_manager.get_config_value('get_dark_mode', 'delay')) * 1000, self.check_dark_mode)
 
   def check_dark_mode(self):
-    latitude = float(self.config['user']["home_lat"])
-    longitude = float(self.config["user"]["home_lon"])
+    latitude = float(self.config_manager.get_config_value('user', "home_lat"))
+    longitude = float(self.config_manager.get_config_value("user", "home_lon"))
 
     sun = Sun(latitude, longitude)
 
@@ -65,4 +61,4 @@ class AppManager:
     else:
       self.browser.settings().setAttribute(QWebEngineSettings.WebAttribute.ForceDarkMode, True)
 
-    QTimer.singleShot(int(self.config['get_dark_mode']['delay']) * 1000, self.check_dark_mode)
+    QTimer.singleShot(int(self.config_manager.get_config_value('get_dark_mode', 'delay')) * 1000, self.check_dark_mode)

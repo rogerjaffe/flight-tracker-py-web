@@ -38,12 +38,14 @@ class FtFlight:
 
 
 class FlightManager:
-  def __init__(self, app_manager: AppManager, base_path: str):
+  def __init__(self, app_manager: AppManager, base_path: str, config_manager):
     self.app_manager = app_manager
     self.base_path = base_path
+    self.config_manager = config_manager
     self.logger = logging.getLogger(__name__)
     self.ft_flights: dict[str, FtFlight] = {}
     self.display_queue = DisplayQueue()
+    self.wait_cycles = 0
 
     self.state_lock = threading.Lock()
     self.queue = queue.Queue()
@@ -103,25 +105,27 @@ class FlightManager:
 
   def filter_flights(self):
     clone = copy.deepcopy(self.ft_flights)
-    if self.app_manager.get_config_value('app', 'airlines_only'):
+    if self.config_manager.get_config_value('app', 'airlines_only'):
       regex = re.compile(r'^[A-Z]{3}[0-9]{1,4}$')
       clone = {k: v for k, v in clone.items() if regex.match(v.flight.callsign)}
 
-    if self.app_manager.get_config_value('app', 'has_position'):
+    if self.config_manager.get_config_value('app', 'has_position'):
       clone = {k: v for k, v in clone.items() if v.flight.latitude is not None and v.flight.longitude is not None}
 
-    if not self.app_manager.get_config_value('app', 'on_ground'):
+    if not self.config_manager.get_config_value('app', 'on_ground'):
       clone = {k: v for k, v in clone.items() if v.flight.on_ground == 0}
 
-    if self.app_manager.get_config_value('app', 'has_origin_destination'):
+    if self.config_manager.get_config_value('app', 'has_origin_destination'):
       clone = {k: v for k, v in clone.items() if
                v.flight.origin_airport_iata != '' and v.flight.destination_airport_iata != ''}
 
     return clone
 
-  def get_flight_data(self):
+  def get_flight_data(self, hex_code: str = None):
+    if self.wait_cycles > 0 and hex_code is None:
+      self.wait_cycles = self.wait_cycles - 1
+      return None
     # Filter the flights based on config criteria
-    # Select a random flight
     # Lookup registration using URL above (find the field "type": "live" and the callsign matches the search key
     # Lookup flight details using the FR24 list.json URL:
     #  https://api.flightradar24.com/common/v1/flight/list.json?fetchBy=flight&page=1&limit=50&live=1&query=FX3619
@@ -142,7 +146,12 @@ class FlightManager:
       clone = self.filter_flights()
       keys = list(clone.keys())
       self.display_queue.process_new_data(keys)
-      key = self.display_queue.get_display_hex()
+      if hex_code is None:
+        key = self.display_queue.get_display_hex()
+      else:
+        key = hex_code
+        self.wait_cycles = self.wait_cycles + 1
+        self.display_queue.move_to_end(key)
       flight = clone[key]
 
       registration = flight.flight.registration

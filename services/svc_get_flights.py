@@ -6,11 +6,11 @@ regex_pattern = re.compile(r'^[A-Z]{3}[0-9]{1,4}$')
 
 
 class SvcGetFlights(Service):
-  def __init__(self, queue, config, name: str = "anonymous"):
+  def __init__(self, queue, lat: float, lon: float, radius: float, name: str = "anonymous"):
     super().__init__(name=name)
-    self.home_lat = float(config.get("home_lat"))
-    self.home_lon = float(config.get("home_lon"))
-    self.home_radius = float(config.get("home_radius"))
+    self.home_lat = lat
+    self.home_lon = lon
+    self.home_radius = radius
     self.queue = queue
     self.fr_api = FlightRadar24API()
     self.bounds = self.fr_api.get_bounds_by_point(self.home_lat, self.home_lon, self.home_radius * 1000)

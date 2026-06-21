@@ -3,9 +3,17 @@ import useFlightData from "../../../hooks/useFlightData.ts";
 import {calculateDistance} from "../../utilities/calculateDistance.ts";
 import useConfigData from "../../../hooks/useConfigData.ts";
 import {calculateBearing, calculateDirection} from "../../utilities/calculateBearing.ts";
+import {setFlight} from "../../../bridge/pythonBridge";
+import type {TargetedMouseEvent} from "preact";
 
 const Distance = () => {
   const {flightList, detail} = useFlightData();
+
+  const gotoHex = (e: TargetedMouseEvent<HTMLTableCellElement>) => {
+    const hexCode = e.currentTarget.getAttribute('data-hex');
+    if (!hexCode) return;
+    setFlight(hexCode);
+  }
 
   if (!flightList) return null;
   const thisAcHex = detail?.aircraft?.hex ?? "";
@@ -40,7 +48,7 @@ const Distance = () => {
     return (
       <table
         id="distance-list"
-        class="table-auto border-collapse w-full text-left text-sm min-w-full"
+        class="table-auto border-collapse w-full text-left text-xs min-w-full"
       >
         <thead class="sticky top-0 bg-gray-50 shadow-sm  [&_th]:pl-2 [&_th]:pr-2">
         <tr class="border-black border-b-2">
@@ -80,31 +88,39 @@ const Distance = () => {
             : "";
 
           return (
-            <tr key={leftItem.hex}>
-              <td className={`text-center ${leftClass}`}>{leftItem.callsign}</td>
-              <td className={leftClass}>
+            <tr key={leftItem.hex} className="cursor-pointer">
+              <td className={`text-center ${leftClass}`} data-hex={leftItem.hex}
+                  onClick={gotoHex}>{leftItem.callsign}</td>
+              <td className={leftClass} data-hex={leftItem.hex} onClick={gotoHex}>
                 {leftItem.origin}
                 {" - "}
                 {leftItem.destination}
               </td>
-              <td className={`text-center ${leftClass}`}>{leftItem.dx.toFixed(0)} mi</td>
-              <td className={`text-center ${leftClass}`} style={{paddingRight: "2px"}}>
+              <td className={`text-center ${leftClass}`} data-hex={leftItem.hex}
+                  onClick={gotoHex}>{leftItem.dx.toFixed(0)} mi
+              </td>
+              <td className={`text-center ${leftClass}`} style={{paddingRight: "2px"}} data-hex={leftItem.hex}
+                  onClick={gotoHex}>
                 {leftItem.bearing}&deg;{" "}
                 {leftItem.direction}
               </td>
-              <td className={`text-right ${leftClass}`}>{col1AltitudeText}</td>
-              <td className={`text-center ${rightClass}`}>{rightItem ? rightItem.callsign : ""}</td>
-              <td className={rightClass}>
+              <td className={`text-right ${leftClass}`} data-hex={leftItem.hex}
+                  onClick={gotoHex}>{col1AltitudeText}</td>
+              <td className={`text-center ${rightClass}`} data-hex={rightItem?.hex ?? ''}
+                  onClick={gotoHex}>{rightItem ? rightItem.callsign : ""}</td>
+              <td className={rightClass} data-hex={rightItem?.hex ?? ''} onClick={gotoHex}>
                 {
                   rightItem ? (<span>{rightItem.origin} - {rightItem.destination}</span>
                   ) : ""
                 }
               </td>
-              <td className={`text-center ${rightClass}`}>{rightItem ? `${rightItem.dx.toFixed(0)} mi` : ""}</td>
-              <td className={`text-center ${rightClass}`}>
+              <td className={`text-center ${rightClass}`} data-hex={rightItem?.hex ?? ''}
+                  onClick={gotoHex}>{rightItem ? `${rightItem.dx.toFixed(0)} mi` : ""}</td>
+              <td className={`text-center ${rightClass}`} data-hex={rightItem?.hex ?? ''} onClick={gotoHex}>
                 {rightItem ? <span>{rightItem.bearing}&deg;{" "}{rightItem.direction}</span> : ""}
               </td>
-              <td className={`text-right ${rightClass}`}>{col2AltitudeText}</td>
+              <td className={`text-right ${rightClass}`} data-hex={rightItem?.hex ?? ''}
+                  onClick={gotoHex}>{col2AltitudeText}</td>
             </tr>
           );
         })}

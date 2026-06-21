@@ -2,7 +2,7 @@ import Flag from "./Flag";
 import Position from "./Position.tsx";
 import DepArrTimes from "./DepArrTimes.tsx";
 import EarlyLate from "./EarlyLate.tsx";
-import FlyingTime from "../../TopRow/Right/FlyingTime.tsx";
+import FlyingTime from "./FlyingTime.tsx";
 import useFlightData from "../../../hooks/useFlightData.ts";
 import {calculateDistance} from "../../utilities/calculateDistance.ts";
 import useConfigData from "../../../hooks/useConfigData.ts";
@@ -10,10 +10,22 @@ import {
   calculateBearing,
   calculateDirection,
 } from "../../utilities/calculateBearing.ts";
-import pkg from "../../../../package.json";
+import {useState} from "preact/hooks";
+import {ViewSettingsModal} from "./ViewSettingsModal.tsx";
+import {useAppDispatch, useAppSelector} from "../../../store";
+import {setToFlightList} from "../../../store/appSlice.ts";
+import ActualTime from "./ActualTime.tsx";
 
 const Right = () => {
-  // const { backend, isReady, error } = usePythonBridge();
+  const dispatch = useAppDispatch();
+  const {displayRotate, displayRotateInterval} = useAppSelector(state => state.app);
+  const [isOpen, setIsOpen] = useState(false);
+  const closeSettings = () => setIsOpen(false);
+  const openSettings = () => {
+    setIsOpen(true);
+    dispatch(setToFlightList());
+  }
+
   const {detail, toDisplay} = useFlightData();
   const config = useConfigData();
   const aircraft = detail.aircraft;
@@ -100,6 +112,10 @@ const Right = () => {
           </td>
         </tr>
         <tr>
+          <td>Actual time:</td>
+          <td><ActualTime/></td>
+        </tr>
+        <tr>
           <td>Late/Early:</td>
           <td>
             <EarlyLate
@@ -130,12 +146,18 @@ const Right = () => {
           </td>
         </tr>
         <tr>
-          <td colSpan={2} className="italic text-xs text-gray-400">
-            Version {pkg.version}
+          <td colSpan={2} className="text-center">
+            <button
+              className="mt-2 btn btn-sm rounded-lg bg-teal-300 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
+              onClick={openSettings}>
+              Settings
+            </button>
           </td>
         </tr>
         </tbody>
       </table>
+      <ViewSettingsModal isOpen={isOpen} onClose={closeSettings} displayRotate={displayRotate}
+                         displayRotateInterval={displayRotateInterval}/>
     </div>
   );
 };

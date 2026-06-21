@@ -16,6 +16,10 @@ class DisplayQueue:
     self.add(hex_)
     return hex_
 
+  def move_to_end(self, hex_code: str):
+    self.queue.remove(hex_code)
+    self.add(hex_code)
+
   def process_new_data(self, data: list[str]):
     # Find the hex codes that are not in the queue
     to_be_added = [hex_ for hex_ in data if hex_ not in self.queue]

@@ -1,7 +1,7 @@
-import { QWebChannel } from "qwebchannel";
-import { store } from "../store"; // Your configured RTK store
-import { setFlightData } from "../store/flightSlice";
-import { setAppConfig } from "../store/appSlice.ts";
+import {QWebChannel} from "qwebchannel";
+import {store} from "../store"; // Your configured RTK store
+import {setFlightData} from "../store/flightSlice";
+import {setAppConfig} from "../store/appSlice.ts";
 
 declare global {
   interface Window {
@@ -9,6 +9,8 @@ declare global {
     qt: { webChannelTransport: any };
   }
 }
+
+let backend: any = null;
 
 export function initPythonBridge() {
   console.log("initPythonBridge");
@@ -26,7 +28,7 @@ export function initPythonBridge() {
     console.log("initPythonBridge: QWebChannel created");
     console.log("initPythonBridge: channel objects:", channel.objects);
 
-    const backend = channel.objects.backend;
+    backend = channel.objects.backend;
 
     if (!backend) {
       console.error("initPythonBridge: backend object not found");
@@ -41,8 +43,11 @@ export function initPythonBridge() {
     console.log("initPythonBridge: backend object:", backend);
 
     backend.flight.connect((jsonString: string) => {
-      // console.log("flight received from Python:", jsonString);
       store.dispatch(setFlightData(jsonString));
+    });
+
+    backend.status.connect((error: string) => {
+      console.log("initPythonBridge: backend status:", error);
     });
 
     try {
@@ -60,4 +65,18 @@ export function initPythonBridge() {
 
     console.log("initPythonBridge: connected to backend.flight");
   });
+}
+
+export function setFlight(hexCode: string) {
+  if (!backend) {
+    console.error("setPythonFlight: backend is not ready");
+    return;
+  }
+
+  if (!hexCode) {
+    console.error("setPythonFlight: hexCode is required");
+    return;
+  }
+
+  backend.set_flight(hexCode);
 }

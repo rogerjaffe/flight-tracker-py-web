@@ -9,13 +9,25 @@ export type DisplayContent = "flight" | "map" | "distance";
 interface AppState {
   displayContent: DisplayContent;
   displayRotate: boolean;
+  displayRotateInterval: number;
   config: Record<string, any> | null;
+}
+
+const ls = localStorage.getItem('flight-tracker')
+let displayRotate = false;
+let displayRotateInterval = 30;
+
+if (ls) {
+  const lsValues = JSON.parse(ls)
+  displayRotate = lsValues.enableSwitching ?? false
+  displayRotateInterval = lsValues.switchDelay ?? 30 // seconds
 }
 
 // 3. Provide the initial state using that type
 const initialState: AppState = {
   displayContent: "flight",
-  displayRotate: false,
+  displayRotate,
+  displayRotateInterval,      // Seconds
   config: null,
 };
 
@@ -34,8 +46,14 @@ export const appSlice = createSlice({
         state.displayContent = "flight";
       }
     },
-    toggleRotate: (state) => {
-      state.displayRotate = !state.displayRotate;
+    setToFlightList: (state) => {
+      state.displayContent = 'flight'
+    },
+    setRotate: (state, action: PayloadAction<boolean>) => {
+      state.displayRotate = action.payload;
+    },
+    setRotateInterval: (state, action: PayloadAction<number>) => {
+      state.displayRotateInterval = action.payload;
     },
     setAppConfig: (state, action: PayloadAction<string>) => {
       try {
@@ -49,7 +67,7 @@ export const appSlice = createSlice({
 });
 
 // Export the generated action creators for use in components
-export const {toggleDisplay, toggleRotate, setAppConfig} = appSlice.actions;
+export const {toggleDisplay, setToFlightList, setRotate, setRotateInterval, setAppConfig} = appSlice.actions;
 
 // Export the reducer to plug into the store configuration
 export default appSlice.reducer;
