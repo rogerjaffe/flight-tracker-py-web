@@ -1,4 +1,3 @@
-import configparser
 import datetime
 from PySide6.QtCore import QTimer
 from PySide6.QtWebEngineCore import QWebEngineSettings
@@ -12,15 +11,6 @@ class AppManager:
     self.browser = None
     self.config_manager = config_manager
 
-  # def get_config(self):
-  #   return self.config
-  #
-  # def get_config_group(self, group_name: str):
-  #   return dict(self.config[group_name])
-  #
-  # def get_config_value(self, group_name: str, key: str):
-  #   return self.config[group_name][key]
-  #
   def set_browser(self, browser):
     self.browser = browser
     QTimer.singleShot(int(self.config_manager.get_config_value('get_dark_mode', 'delay')) * 1000, self.check_dark_mode)

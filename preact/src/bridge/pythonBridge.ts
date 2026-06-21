@@ -42,6 +42,8 @@ export function initPythonBridge() {
 
     console.log("initPythonBridge: backend object:", backend);
 
+    // These connect the Python signals in preact_bridge.py
+    // They will fire when Python emits a signal on the channel
     backend.flight.connect((jsonString: string) => {
       store.dispatch(setFlightData(jsonString));
     });
@@ -51,6 +53,8 @@ export function initPythonBridge() {
     });
 
     try {
+      // Fetch initial configuration from the backend
+      // These function calls connect to the Slots in preact_bridge.py
       const configJsonString = await channel.objects.backend.fetch_config();
       console.log(configJsonString);
       store.dispatch(setAppConfig(configJsonString));
