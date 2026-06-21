@@ -8,7 +8,7 @@ from FlightRadarAPI import Flight
 from glom import glom
 
 from classes import DisplayQueue
-from models import AppManager
+from managers import AppManager
 from utilities import http_request
 
 

@@ -15,7 +15,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication, QWidget
 from typing import Optional
 from classes import Worker, PreactBridge, ThreadedHTTPServer
-from models import ConfigManager, AppManager, FlightManager
+from managers import ConfigManager, AppManager, FlightManager
 from services import SvcGetFlights
 
 
@@ -33,7 +33,8 @@ class App():
     if self.is_dev:
       os.environ['QTWEBENGINE_REMOTE_DEBUGGING'] = "9222"
 
-    # Start a simple http server to serve the UI
+    # If prod, start a simple http server to serve the UI
+    # If dev then we're running a separate Vite dev server
     if not self.is_dev:
       self.http_server = ThreadedHTTPServer(directory_to_serve=os.path.join(base_path, 'preact/dist'))
       self.port = self.http_server.port
@@ -121,7 +122,7 @@ class App():
 
     # Check all components are ready and error-free
     self.check_status()
-    
+
     sys.exit(self.application.exec())
 
   # Handles the browser load finished event
