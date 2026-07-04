@@ -2,7 +2,7 @@
 
 
 class ADSB:
-  def __init__(self, flight: Flight):
+  def __init__(self, flight):
     self.squawk = flight.squawk
     self.hex = flight.icao_24bit
     self.altitude = flight.altitude
