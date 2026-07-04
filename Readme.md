@@ -99,7 +99,8 @@ python .
 * Open the `~/flight-tracker-py-web/config.ini` file in the project root
 * In the [user] section set your latitude and longitude.
 * Set the view radius (in km). You may need to adjust the radius depending on the amount of airplane traffic in your
-  area. Busier airspaces should have a smaller radius to avoid overloading the source API.
+  area. Busier airspace should have a smaller radius to avoid overloading the source API. If you find that flights are
+  not being retrieved try reducing the radius.
 
 ### Set up app filters
 

@@ -1,12 +1,9 @@
-import useFlightData from "../../../hooks/useFlightData.ts";
+import type { FlightInfoTopLeft } from "../../../types/FlightInfoRecord.ts";
 
-const AircraftCode = () => {
-  const { toDisplay } = useFlightData();
-
-  const aircraftCode = toDisplay.flight.aircraft_code || "Unknown";
+const AircraftCode = ({ topLeft }: { topLeft: FlightInfoTopLeft }) => {
   return (
-    <div id="icao-flight" className="text-sm">
-      {aircraftCode}
+    <div id="icao-flight" className="text-sm text-center">
+      {topLeft?.aircraft_code ?? ""}
     </div>
   );
 };

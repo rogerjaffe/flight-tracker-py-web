@@ -1,15 +1,17 @@
-import LeftSide from "./Left";
+import Left from "./Left";
 import Middle from "./Middle";
 import Right from "./Right";
+import { Fragment } from "preact";
 
 const TopRow = () => {
   return (
-    <div className="grid grid-cols-14 gap-2 text-center border-black border-b-2">
-      <LeftSide />
+    <Fragment>
+      <Left />
       <Middle />
       <Right />
-    </div>
+    </Fragment>
   );
+  // }
 };
 
 export default TopRow;

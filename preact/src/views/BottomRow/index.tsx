@@ -1,11 +1,11 @@
 import Left from "./Left";
-import Right from "./Right";
+// import Right from "./Right";
 
 const BottomRow = () => {
   return (
-    <div class="grid grid-cols-4 gap-2 text-center border-black border-b rotating-content-container">
+    <div class="col-span-6 row-start-2 row-span-5 gap-2 text-center border-black border-b rotating-content-container">
       <Left />
-      <Right />
+      {/*<Right />*/}
     </div>
   );
 };

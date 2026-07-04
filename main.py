@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 from app import App
 from utilities import TextSuppressionFilter
+from config import Config
 
 
 def main():
@@ -18,5 +19,8 @@ def main():
   for handler in root_logger.handlers:
     handler.addFilter(my_filter)
 
+  # Set up config
+  config = Config()
+
   # Start the app!
-  App(base_path=base_path, logger=root_logger)
+  App(base_path=base_path, logger=root_logger, config=config)

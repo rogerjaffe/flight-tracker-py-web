@@ -1,0 +1,6 @@
+Retrieve aircraft data by icao code => registration
+https://api.flightradar24.com/common/v1/search.json?fetchBy=reg&page=1&limit=25&live=1&query=AC8577
+
+Retrieve flight information by registration
+https://api.flightradar24.com/common/v1/flight/list.json?&fetchBy=reg&page=1&limit=25&query=N906AA
+

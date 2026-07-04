@@ -10,25 +10,25 @@ interface AppState {
   displayContent: DisplayContent;
   displayRotate: boolean;
   displayRotateInterval: number;
-  config: Record<string, any> | null;
+  darkmode: boolean;
 }
 
-const ls = localStorage.getItem('flight-tracker')
+const ls = localStorage.getItem("flight-tracker");
 let displayRotate = false;
 let displayRotateInterval = 30;
 
 if (ls) {
-  const lsValues = JSON.parse(ls)
-  displayRotate = lsValues.enableSwitching ?? false
-  displayRotateInterval = lsValues.switchDelay ?? 30 // seconds
+  const lsValues = JSON.parse(ls);
+  displayRotate = lsValues.enableSwitching ?? false;
+  displayRotateInterval = lsValues.switchDelay ?? 30; // seconds
 }
 
 // 3. Provide the initial state using that type
 const initialState: AppState = {
   displayContent: "flight",
   displayRotate,
-  displayRotateInterval,      // Seconds
-  config: null,
+  displayRotateInterval, // Seconds
+  darkmode: false,
 };
 
 // 4. Create the slice
@@ -47,7 +47,7 @@ export const appSlice = createSlice({
       }
     },
     setToFlightList: (state) => {
-      state.displayContent = 'flight'
+      state.displayContent = "flight";
     },
     setRotate: (state, action: PayloadAction<boolean>) => {
       state.displayRotate = action.payload;
@@ -55,19 +55,20 @@ export const appSlice = createSlice({
     setRotateInterval: (state, action: PayloadAction<number>) => {
       state.displayRotateInterval = action.payload;
     },
-    setAppConfig: (state, action: PayloadAction<string>) => {
-      try {
-        state.config = JSON.parse(action.payload);
-        console.log(state.config);
-      } catch (e) {
-        console.error(e);
-      }
+    setDarkmode: (state, action: PayloadAction<boolean>) => {
+      state.darkmode = action.payload;
     },
   },
 });
 
 // Export the generated action creators for use in components
-export const {toggleDisplay, setToFlightList, setRotate, setRotateInterval, setAppConfig} = appSlice.actions;
+export const {
+  toggleDisplay,
+  setToFlightList,
+  setDarkmode,
+  setRotate,
+  setRotateInterval,
+} = appSlice.actions;
 
 // Export the reducer to plug into the store configuration
 export default appSlice.reducer;

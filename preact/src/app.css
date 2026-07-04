@@ -62,8 +62,8 @@ div div {
   top: 50%;
   left: 50%;
   transform: translate(
-          -50%,
-          -50%
+    -50%,
+    -50%
   ); /* Perfectly centers the text over the track */
   font-family: sans-serif;
   font-size: 14px; /* Smaller font to fit comfortably inside a 15px high bar */
@@ -122,9 +122,22 @@ div div {
   color: red;
 }
 
+.dec {
+  color: red;
+}
+
+.inc {
+  color: green;
+}
+
 .arrow-font {
   width: 15px;
   text-align: center;
+}
+
+.arrow-width {
+  width: 10px;
+  display: inline-block;
 }
 
 .ud-arrow {
@@ -187,7 +200,8 @@ hr {
 }
 
 #distance-list {
-  thead tr th, tbody tr td {
+  thead tr th,
+  tbody tr td {
     padding-top: 2px;
     padding-bottom: 2px;
   }

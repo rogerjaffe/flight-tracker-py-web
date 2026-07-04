@@ -1,7 +1,7 @@
 import { type RootState, useAppSelector } from "../store";
 
 // A normal selector that can return your data or null
-export const selectConfigState = (state: RootState) => state.app.config;
+export const selectConfigState = (state: RootState) => state.config;
 
 export function useConfigData() {
   const data = useAppSelector(selectConfigState);

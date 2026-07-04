@@ -1,13 +1,9 @@
-import useFlightData from "../../../hooks/useFlightData.ts";
+import type { FlightInfoTopLeft } from "../../../types/FlightInfoRecord.ts";
 
-const FlightIcao = () => {
-  const { toDisplay } = useFlightData();
-  const airlineIcao = toDisplay.flight.callsign?.substring(0, 3) ?? "Unknown";
-  const flightNumber = toDisplay.flight.callsign?.substring(3) ?? "";
-
+const FlightIcao = ({ topLeft }: { topLeft: FlightInfoTopLeft }) => {
   return (
-    <div id="icao-flight" className="text-xl font-bold">
-      {airlineIcao} {flightNumber}
+    <div id="icao-flight" className="text-xl text-center font-bold">
+      {topLeft.callsign}
     </div>
   );
 };

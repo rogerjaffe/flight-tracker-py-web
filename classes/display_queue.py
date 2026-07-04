@@ -8,10 +8,17 @@ class DisplayQueue:
   def clear(self):
     self.queue.clear()
 
-  def add(self, item: str):
-    self.queue.appendleft(item)
+  def add(self, hex_code: str):
+    if hex_code not in self.queue:
+      self.queue.appendleft(hex_code)
 
-  def get_display_hex(self) -> str:
+  def remove(self, hex_code: str):
+    if hex_code in self.queue:
+      self.queue.remove(hex_code)
+
+  def get_display_hex(self) -> str | None:
+    if len(self.queue) == 0:
+      return None
     hex_ = self.queue.pop()
     self.add(hex_)
     return hex_

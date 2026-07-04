@@ -1,35 +1,20 @@
-import { useMemo } from "preact/hooks";
-import { calculateDistance } from "../../utilities/calculateDistance.ts";
-import useFlightData from "../../../hooks/useFlightData.ts";
+// import { useMemo } from "preact/hooks";
+// import { calculateDistance } from "../../utilities/calculateDistance.ts";
+// import useFlightData from "../../../hooks/useFlightData.ts";
 
-const ProgressBar = () => {
-  const { detail, toDisplay } = useFlightData();
+import type { RealTimeFlightInfo } from "../../../types/FlightInfoRecord.ts";
 
-  const progress = useMemo(() => {
-    if (toDisplay.position.length === 0) return null;
-    const { latitude: acLat, longitude: acLon } =
-      toDisplay.position[toDisplay.position.length - 1];
-    const { latitude: orLat, longitude: orLon } =
-      detail.airport.origin.position;
-    const { latitude: deLat, longitude: deLon } =
-      detail.airport.destination.position;
-    const totalDx = calculateDistance(orLat, orLon, deLat, deLon, "nm") ?? 0;
-    const fromDx = calculateDistance(orLat, orLon, acLat, acLon, "nm") ?? 0;
-    return totalDx === 0 ? 0 : Math.round((fromDx / totalDx) * 100);
-  }, [detail, toDisplay]);
-
-  if (progress === null) return null;
-
+const ProgressBar = ({ realTime }: { realTime: RealTimeFlightInfo }) => {
   return (
     <div class="progress-container">
       <div class="progress-track">
         <div
           id="progress-bar-value"
           class="progress-bar"
-          style={`width: ${progress}%;`}
+          style={`width: ${realTime.progress.toFixed(0)}%`}
         ></div>
         <span id="progress-bar-text" class="progress-text">
-          {progress}%
+          {realTime.progress.toFixed(0)}%
         </span>
       </div>
     </div>

@@ -1,6 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import appReducer from "./appSlice";
-import flightReducer from "./flightSlice";
+import configReducer from "./configSlice";
+import flightInfoReducer from "./flightInfoSlice";
+import flightListReducer from "./flightListSlice";
 import {
   type TypedUseSelectorHook,
   useDispatch,
@@ -11,7 +13,9 @@ import {
 export const store = configureStore({
   reducer: {
     app: appReducer, // The key 'items' determines the state namespace
-    flight: flightReducer,
+    config: configReducer,
+    flightList: flightListReducer,
+    flightInfo: flightInfoReducer,
   },
 });
 

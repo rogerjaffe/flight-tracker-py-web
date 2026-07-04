@@ -12,8 +12,29 @@ class BooleanConfigParser(configparser.ConfigParser):
     }
 
   def get(self, section, option, *args, **kwargs):
+    # Fetch the raw string value from the configuration file
     val = super().get(section, option, *args, **kwargs)
-    # Automatically convert to Python boolean if it matches
-    if isinstance(val, str) and val.lower() in self.bool_mapping:
-      return self.bool_mapping[val.lower()]
+
+    if not isinstance(val, str):
+      return val
+
+    val_lower = val.lower()
+
+    # 1. Handle Boolean Conversion
+    if val_lower in self.bool_mapping:
+      return self.bool_mapping[val_lower]
+
+    # 2. Handle Integer Conversion
+    try:
+      return int(val)
+    except ValueError:
+      pass
+
+    # 3. Handle Float Conversion
+    try:
+      return float(val)
+    except ValueError:
+      pass
+
+    # Return original string if no conversions match
     return val

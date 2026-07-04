@@ -10,3 +10,7 @@ dependencies = []
 [tool.setuptools]
 # Explicitly lists your application directories so setuptools can bundle them
 packages = ["app", "models", "preact", "classes", "services", "utilities"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

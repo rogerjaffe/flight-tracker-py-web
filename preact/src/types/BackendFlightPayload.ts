@@ -1,4 +1,4 @@
-import type { Fr24FlightDetail } from "./Fr24FlightDetail.ts";
+import type {Fr24FlightDetail} from "./Fr24FlightDetail.ts";
 
 export interface Position {
   ground_speed: number;
@@ -32,18 +32,4 @@ export interface Flight {
   squawk: string;
   time: number;
   vertical_speed: number;
-}
-
-export interface FlightRecord {
-  flight: Flight;
-  hex: string;
-  position: Position[];
-}
-
-export interface BackendFlightPayload {
-  flight_list: {
-    [key: string]: FlightRecord;
-  };
-  detail: Fr24FlightDetail;
-  to_display: FlightRecord;
 }

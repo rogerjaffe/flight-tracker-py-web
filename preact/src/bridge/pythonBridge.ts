@@ -1,7 +1,11 @@
-import {QWebChannel} from "qwebchannel";
-import {store} from "../store"; // Your configured RTK store
-import {setFlightData} from "../store/flightSlice";
-import {setAppConfig} from "../store/appSlice.ts";
+import { QWebChannel } from "qwebchannel";
+import { store } from "../store";
+import { setConfig } from "../store/configSlice.ts";
+import { setFlightList } from "../store/flightListSlice.ts";
+import { setDarkmode } from "../store/appSlice.ts";
+import { setFlightInfo } from "../store/flightInfoSlice.ts"; // Your configured RTK store
+// import {setFlightData} from "../store/flightSlice";
+// import {setAppConfig} from "../store/appSlice.ts";
 
 declare global {
   interface Window {
@@ -35,36 +39,41 @@ export function initPythonBridge() {
       return;
     }
 
-    if (!backend.flight || !backend.config) {
-      console.error("initPythonBridge: backend.flight signal not found");
+    if (!backend.send_config) {
+      console.error("initPythonBridge: backend signal(s) not found");
       return;
     }
 
     console.log("initPythonBridge: backend object:", backend);
 
-    // These connect the Python signals in preact_bridge.py
-    // They will fire when Python emits a signal on the channel
-    backend.flight.connect((jsonString: string) => {
-      store.dispatch(setFlightData(jsonString));
+    // backend.send_flight_data.connect((list: string) => {
+    //   console.log("initPythonBridge: backend send_flight_data:", list);
+    // });
+
+    backend.send_darkmode.connect((jsonData: any) => {
+      console.log("initPythonBridge: backend send_darkmode:", jsonData);
+      store.dispatch(setDarkmode(jsonData));
     });
 
-    backend.status.connect((error: string) => {
-      console.log("initPythonBridge: backend status:", error);
+    backend.send_config.connect((jsonData: any) => {
+      console.log("initPythonBridge: backend send_config:", jsonData);
+      store.dispatch(setConfig(jsonData));
     });
 
-    try {
-      // Fetch initial configuration from the backend
-      // These function calls connect to the Slots in preact_bridge.py
-      const configJsonString = await channel.objects.backend.fetch_config();
-      console.log(configJsonString);
-      store.dispatch(setAppConfig(configJsonString));
+    backend.send_flight_list.connect((jsonData: any) => {
+      console.log("send_flight_list", jsonData);
+      store.dispatch(setFlightList(jsonData));
+    });
 
-      // store.dispatch(setAppConfig(configJsonString));
-    } catch (error) {
-      console.error(
-        "Failed to fetch initial configuration from backend",
-        error,
-      );
+    backend.send_flight_data.connect((jsonData: any) => {
+      console.log("send_flight_data", jsonData);
+      store.dispatch(setFlightInfo(jsonData));
+    });
+
+    if (typeof backend.preact_ready === "function") {
+      backend.preact_ready();
+    } else {
+      console.error("initPythonBridge: backend.preact_ready slot not found");
     }
 
     console.log("initPythonBridge: connected to backend.flight");
