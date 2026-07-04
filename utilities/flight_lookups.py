@@ -85,7 +85,6 @@ def update_flight_list_detail(flight_list_item):
   ui_list = ui_list | rec
   return ui_list
 
-
 # def get_ui_regions_static_detail(fr24_detail: Fr24FlightDetail) -> UIStaticFlightDetails:
 #   # Top Left
 #   top_left: TopLeft = {
@@ -122,13 +121,13 @@ def update_flight_list_detail(flight_list_item):
 #     "top_right": top_right
 #   }
 #
-
-def get_real_time_detail(flight: FlightData):
-  return {
-    "altitude": (12000, 'ft', "▲", 'inc'),
-    "groundspeed": (245, 'kts', "▼", 'inc'),
-    "heading": (132, "\u00B0", "◀", 'dec'),
-    "distance": (23, "mi"),  # distance, units
-    "bearing": (239, "WSW"),  # bearing, compass
-    "observed": "27m 12s"
-  }
+#
+# def get_real_time_detail(flight):
+#   return {
+#     "altitude": (12000, 'ft', "▲", 'inc'),
+#     "groundspeed": (245, 'kts', "▼", 'inc'),
+#     "heading": (132, "\u00B0", "◀", 'dec'),
+#     "distance": (23, "mi"),  # distance, units
+#     "bearing": (239, "WSW"),  # bearing, compass
+#     "observed": "27m 12s"
+#   }
